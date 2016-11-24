@@ -1,17 +1,19 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using SpiderJ.Utils;
 using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SpiderJ.PageModels
+namespace SpiderJ.PageModels.Components
 {
-    public class HomePage
+    public class PageNavigation
     {
         private IWebDriver _driver;
         private IElementLocator _locator;
 
-        public HomePage(
+        public PageNavigation(
             IWebDriver driver,
             IElementLocator locator)
         {
@@ -19,11 +21,11 @@ namespace SpiderJ.PageModels
             _locator = locator;
         }
 
-        public IWebElement NavMenuItem
+        public IWebElement NextPage
         {
             get
             {
-                return _locator.Find(_driver, By.ClassName("nav-1"));
+                return _locator.Find(_driver, By.ClassName("next"));
             }
         }
     }

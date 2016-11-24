@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace SpiderJ.Data
 {
-    public class Repository
+    public class MemoryRepository : IRepository
     {
-        private List<Product> _products;
-
-        public Repository()
-        {
-            _products = new List<Product>();
-        }
+        private List<Product> _products = new List<Product>();
 
         public void Add(Product product)
         {

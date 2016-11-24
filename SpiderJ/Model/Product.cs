@@ -8,9 +8,10 @@ namespace SpiderJ.Model
 {
     public class Product
     {
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
-        public string Image { get; set; }
+        public string ImageUri { get; set; }
         public string Price { get; set; }
     }
 }

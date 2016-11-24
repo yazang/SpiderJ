@@ -1,14 +1,13 @@
 ﻿using System;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Chrome;
-
-// Requires reference to WebDriver.Support.dll
-using OpenQA.Selenium.Support.UI;
-using System.Collections.Generic;
 using SpiderJ.Data;
-using SpiderJ.Model;
 using SpiderJ.PageModels;
+using SpiderJ.Utils;
+using Ninject;
+using System.Reflection;
+using SpiderJ.PageModels.Components;
+using System.Threading;
+using System.Data.Entity;
 
 namespace SpiderJ
 {
@@ -16,41 +15,54 @@ namespace SpiderJ
     {
         static void Main(string[] args)
         {
-            var context = new Repository();
+            IKernel kernel = new StandardKernel();
+            kernel.Load(Assembly.GetExecutingAssembly());
+            var driver = kernel.Get<IWebDriver>();
+            var locator = kernel.Get<IElementLocator>();
+            //var repository = kernel.Get<IRepository>();
+            var dbContext = new SpiderJDB();
+            
+            driver.Navigate().GoToUrl("http://www.hyhealth.co.nz/");
 
-            using (IWebDriver driver = new FirefoxDriver())
+            var homePage = new HomePage(driver, locator);
+            var menuItem = homePage.NavMenuItem;
+            menuItem.Click();
+
+            var productsPage = new ProductGridPage(driver, locator);
+            for (int i = 0; !productsPage.IsLoaded(); i++)
             {
-                driver.Navigate().GoToUrl("http://www.hyhealth.co.nz/");
-
-                var homePage = new HomePage(driver);
-                var menuItem = homePage.NavMenuItem;
+                if (i >= 2)
+                {
+                    Console.WriteLine("Cannot load ProductGridPage.");
+                    break;
+                }
                 menuItem.Click();
-
-                //var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                
-                //IWebElement sales1 = wait.Until<IWebElement>(d => d.FindElement(By.ClassName("homepage_products_3")));
-
-                //if (sales1 != null)
-                //{
-                //    IEnumerable<IWebElement> items = sales1.FindElements(By.ClassName("homepage_item"));
-
-                //    foreach (IWebElement item in items)
-                //    {
-                //        var name = item.FindElement(By.ClassName("homepage_product_name"));
-                //        var url = name.FindElement(By.TagName("a"));
-                //        var price = item.FindElement(By.ClassName("special-price")).FindElement(By.ClassName("price"));
-                //        var image = item.FindElement(By.TagName("img"));
-
-                //        context.Add(new Product
-                //        {
-                //            Name = name.Text,
-                //            Url = url.GetAttribute("href"),
-                //            Price = price.Text,
-                //            Image = image.GetAttribute("src")
-                //        });
-                //    }
-                //}
             }
+
+            foreach (var product in productsPage.Products)
+            {
+                //repository.Add(product);
+                dbContext.Products.Add(product);
+            }
+
+            var pageNavigation = new PageNavigation(driver, locator);
+            
+            while (pageNavigation.NextPage != null)
+            {
+                pageNavigation.NextPage.Click();
+                Thread.Sleep(3000);
+
+                if (productsPage.IsLoaded())
+                {
+                    foreach (var product in productsPage.Products)
+                    {
+                        //repository.Add(product);
+                        dbContext.Products.Add(product);
+                    }
+                }
+            }
+
+            dbContext.SaveChanges();
         }
     }
 }
