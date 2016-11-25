@@ -51,13 +51,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HeaderController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Models\CartPage.cs" />
     <Compile Include="Models\HeaderSegment.cs" />
     <Compile Include="Models\HomePage.cs" />
     <Compile Include="Models\LoginPage.cs" />
+    <Compile Include="Models\OrderPage.cs" />
     <Compile Include="Models\Product\ProductPage.cs" />
     <Compile Include="Models\Product\ProductsGrid.cs" />
     <Compile Include="Models\Product\ProductThumb.cs" />

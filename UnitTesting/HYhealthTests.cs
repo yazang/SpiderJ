@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using hyhealth.co.nz.Controllers;
+using System.Threading;
 
 namespace UnitTesting
 {
@@ -23,7 +24,7 @@ namespace UnitTesting
         }
 
         [TestMethod]
-        public void TestLogin()
+        public void Demo()
         {
             _driver.Navigate().GoToUrl(_url);
             _driver.Manage().Window.Maximize();
@@ -31,11 +32,15 @@ namespace UnitTesting
             headerController.OpenLoginPage();
             var loginController = new LoginController(_driver, _timespan);
             loginController.Login(_email, _password);
-            headerController.Search("蜂蜜");
-            var productsController = new ProductsController(_driver, _timespan);
-            productsController.AddProductToCart("红印 蜂胶蜂蜜香皂 100克");
-            headerController = new HeaderController(_driver, _timespan);
             headerController.CheckOut();
+            //headerController.Search("蜂蜜");
+            //var productsController = new ProductsController(_driver, _timespan);
+            //productsController.AddProductToCart("红印 蜂胶蜂蜜香皂 100克");
+            //headerController.OpenCart();
+            //var cartController = new CartController(_driver, _timespan);
+            //cartController.CheckOut();
+            var orderController = new OrderController(_driver, _timespan);
+            orderController.EnterAddress();
         }
     }
 }

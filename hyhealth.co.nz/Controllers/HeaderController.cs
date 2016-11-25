@@ -38,6 +38,11 @@ namespace hyhealth.co.nz.Controllers
             _searchButton.Click();
         }
 
+        public void OpenCart()
+        {
+            _cart.Click();
+        }
+
         public void CheckOut()
         {
             _action.MoveToElement(_cart).MoveToElement(_checkOut).Click().Build().Perform();

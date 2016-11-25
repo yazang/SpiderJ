@@ -41,6 +41,7 @@ namespace hyhealth.co.nz.Controllers
                     product.FindElement(_thumb.ProductLink).Click();
                     _wait.Until(d => d.FindElement(_page.AddToCart)).Click();
                     //_action.MoveToElement(product.FindElement(_thumb.AddToCart)).Click().Build().Perform();
+                    break;
                 }
             }
         }
