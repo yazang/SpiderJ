@@ -40,6 +40,7 @@ namespace UnitTesting
             //var cartController = new CartController(_driver, _timespan);
             //cartController.CheckOut();
             var orderController = new OrderController(_driver, _timespan);
+            orderController.NewAddress();
             orderController.EnterAddress();
         }
     }
